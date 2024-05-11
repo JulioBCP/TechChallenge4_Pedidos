@@ -1,5 +1,6 @@
 package br.com.fiap.model;
 
+import br.com.fiap.model.Enum.StatusPedidoEnum;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -17,4 +18,6 @@ public class Pedido {
     @JoinColumn(name = "pedido_id")
     private List<ItemPedido> itensPedido;
     private double valorTotal;
+    @Enumerated(EnumType.STRING)
+    private StatusPedidoEnum status;
 }

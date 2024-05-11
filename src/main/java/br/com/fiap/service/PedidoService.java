@@ -1,5 +1,6 @@
 package br.com.fiap.service;
 
+import br.com.fiap.model.Enum.StatusPedidoEnum;
 import br.com.fiap.model.ItemPedido;
 import br.com.fiap.model.Pedido;
 import br.com.fiap.repository.PedidoRepository;
@@ -30,6 +31,10 @@ public class PedidoService {
     private static final String RETIRAR_ESTOQUE = "retirar";
     private static final String INSERIR_ESTOQUE = "inserir";
 
+    public List<Pedido> listarPedidos() {
+        return pedidoRepository.findAll();
+    }
+
     public Pedido criarPedido(Pedido pedido) {
 
         boolean produtosDisponiveis = verificarDisponibilidadeProdutos(pedido.getItensPedido());
@@ -40,6 +45,7 @@ public class PedidoService {
 
         double valorTotal = calcularValorTotal(pedido.getItensPedido());
         pedido.setValorTotal(valorTotal);
+        pedido.setStatus(StatusPedidoEnum.PEDIDO_RECEBIDO);
 
         atualizarEstoqueProdutos(pedido.getItensPedido(), RETIRAR_ESTOQUE);
 
@@ -54,8 +60,22 @@ public class PedidoService {
 
             atualizarEstoqueProdutos(pedidoExistente.getItensPedido(), INSERIR_ESTOQUE);
         } else {
-            throw new NoSuchElementException("Pedido com id {} nao encontrado" + pedidoId);
+            throw new NoSuchElementException("Pedido com código {} não encontrado" + pedidoId);
         }
+    }
+
+    public Pedido atualizarStatus(Integer pedidoId, StatusPedidoEnum status) {
+
+        Pedido pedido = pedidoRepository.findById(pedidoId).orElse(null);
+
+        if (pedido != null) {
+            pedido.setStatus(status);
+            pedidoRepository.save(pedido);
+        } else {
+            throw new NoSuchElementException("Pedido com código {} não encontrado" + pedidoId);
+        }
+
+        return pedido;
     }
 
     private boolean verificarDisponibilidadeProdutos(List<ItemPedido> itensPedidos) {
@@ -126,10 +146,6 @@ public class PedidoService {
                     entradaSaida
             );
         }
-    }
-
-    public List<Pedido> listarPedidos() {
-        return pedidoRepository.findAll();
     }
 
 }

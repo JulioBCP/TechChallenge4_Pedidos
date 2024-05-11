@@ -1,5 +1,6 @@
 package br.com.fiap.controller;
 
+import br.com.fiap.model.Enum.StatusPedidoEnum;
 import br.com.fiap.model.Pedido;
 import br.com.fiap.service.PedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,11 @@ public class PedidoController {
     @DeleteMapping("/{pedidoId}")
     public void cancelarPedido(@PathVariable Integer pedidoId) {
         pedidoService.cancelarPedido(pedidoId);
+    }
+
+    @PutMapping("/{pedidoId}")
+    public Pedido atualizarStatus(@PathVariable Integer pedidoId, @RequestBody StatusPedidoEnum status) {
+        return pedidoService.atualizarStatus(pedidoId, status);
     }
 
 }
