@@ -35,12 +35,30 @@ public class PedidoService {
         return pedidoRepository.findAll();
     }
 
+    public Pedido obterPedido(Integer pedidoId) {
+        Pedido pedido = pedidoRepository.findById(pedidoId).orElse(null);
+        if (pedido != null) {
+            return pedido;
+        } else {
+            throw new NoSuchElementException("Pedido com código {} não encontrado" + pedidoId);
+        }
+    }
+
+    public List<Pedido> obterPedidoPorStatus(String statusPedido) {
+        StatusPedidoEnum statusPedidoEnum = StatusPedidoEnum.obterStatusPorNomeOuStringEnum(statusPedido);
+        List<Pedido> listaPedidos = pedidoRepository.findByStatus(statusPedidoEnum);
+        if (listaPedidos.isEmpty()) {
+            throw new NoSuchElementException("Não existem pedidos com o status solicitado");
+        }
+        return listaPedidos;
+    }
+
     public Pedido criarPedido(Pedido pedido) {
 
         boolean produtosDisponiveis = verificarDisponibilidadeProdutos(pedido.getItensPedido());
 
         if (!produtosDisponiveis) {
-            throw new NoSuchElementException("Um ou mais produtos nao estao disponiveis");
+            throw new NoSuchElementException("Um ou mais produtos não estao disponiveis");
         }
 
         double valorTotal = calcularValorTotal(pedido.getItensPedido());
@@ -90,7 +108,7 @@ public class PedidoService {
             );
 
             if (response.getStatusCode() == HttpStatus.NOT_FOUND) {
-                throw new NoSuchElementException("Produto nao encontrado");
+                throw new NoSuchElementException("Produto não encontrado");
             } else {
                 try {
                     JsonNode produtoJson = objectMapper.readTree(response.getBody());

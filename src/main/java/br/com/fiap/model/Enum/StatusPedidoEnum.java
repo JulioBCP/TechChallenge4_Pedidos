@@ -3,6 +3,8 @@ package br.com.fiap.model.Enum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.Arrays;
+
 @Getter
 @AllArgsConstructor
 public enum StatusPedidoEnum {
@@ -16,5 +18,21 @@ public enum StatusPedidoEnum {
 
     private String nome;
     private String descricao;
+
+    // Método estático para obter o enum a partir do nome
+    public static StatusPedidoEnum obterStatusPorNome(String nome) {
+        return Arrays.stream(values())
+                .filter(status -> status.nome.equalsIgnoreCase(nome))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Status " + nome + " não encontrado"));
+    }
+
+    // Método estático para obter o enum a partir do nome ou de uma string igual ao próprio nome do enum
+    public static StatusPedidoEnum obterStatusPorNomeOuStringEnum(String status) {
+        return Arrays.stream(values())
+                .filter(enumValue -> enumValue.getNome().equalsIgnoreCase(status) || enumValue.name().equalsIgnoreCase(status))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Nenhum status encontrado com o nome fornecido: " + status));
+    }
 
 }

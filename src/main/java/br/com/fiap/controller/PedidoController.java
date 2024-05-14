@@ -24,13 +24,30 @@ public class PedidoController {
             Pedido novoPedido = pedidoService.criarPedido(pedido);
             return new ResponseEntity<>(novoPedido, HttpStatus.CREATED);
         } catch(NoSuchElementException e) {
-            return new ResponseEntity<>("Um ou mais produtos nao estao disponiveis", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Um ou mais produtos não estao disponiveis", HttpStatus.BAD_REQUEST);
         }
     }
 
     @GetMapping
     public List<Pedido> listarPedidos() {
         return pedidoService.listarPedidos();
+    }
+
+    @GetMapping("/{pedidoId}")
+    public Pedido obterPedidoPorId(@PathVariable Integer pedidoId) {
+        return pedidoService.obterPedido(pedidoId);
+    }
+
+    @GetMapping("/{statusPedido}")
+    public ResponseEntity<?> obterPedidoPorStatus(@PathVariable String statusPedido) {
+        try {
+            List<Pedido> listaPedidos = pedidoService.obterPedidoPorStatus(statusPedido);
+            return new ResponseEntity<>(listaPedidos, HttpStatus.OK);
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Nenhum pedido encontrado para o status fornecido.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ocorreu um erro ao processar a solicitação.");
+        }
     }
 
     @DeleteMapping("/{pedidoId}")
