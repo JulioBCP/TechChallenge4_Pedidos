@@ -96,6 +96,19 @@ public class PedidoService {
         return pedido;
     }
 
+    public Pedido incluirEntregador(Integer pedidoId, Integer entregadorId) {
+        Pedido pedido = pedidoRepository.findById(pedidoId).orElse(null);
+
+        if (pedido != null) {
+            pedido.setEntregadorId(entregadorId);
+            pedidoRepository.save(pedido);
+        } else {
+            throw new NoSuchElementException("Pedido com código {} não encontrado" + pedidoId);
+        }
+
+        return pedido;
+    }
+
     private boolean verificarDisponibilidadeProdutos(List<ItemPedido> itensPedidos) {
         for (ItemPedido itemPedido : itensPedidos) {
             Integer idProduto = itemPedido.getIdProduto();

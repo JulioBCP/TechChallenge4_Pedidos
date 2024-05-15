@@ -20,4 +20,9 @@ public class Pedido {
     private double valorTotal;
     @Enumerated(EnumType.STRING)
     private StatusPedidoEnum status;
+//    @OneToOne
+//    @JoinColumn(name = "entregador_id")
+//    private Entregador entregador;
+    @Column(name = "entregador_id")
+    private Integer entregadorId;
 }

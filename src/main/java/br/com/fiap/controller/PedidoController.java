@@ -60,4 +60,9 @@ public class PedidoController {
         return pedidoService.atualizarStatus(pedidoId, status);
     }
 
+    @PutMapping("/entregador/{pedidoId}/{entregadorId}")
+    public Pedido incluirEntregador(@PathVariable Integer pedidoId, @PathVariable Integer entregadorId) {
+        return pedidoService.incluirEntregador(pedidoId, entregadorId);
+    }
+
 }
