@@ -17,8 +17,8 @@ public class PedidoHelper {
         ItemPedido itemPedido = new ItemPedido(1, 1, 2);
         listaItens.add(itemPedido);
 
-        return new Pedido(1, "Julio Cesar", listaItens,
-                359.99, StatusPedidoEnum.PEDIDO_PAGO, 1);
+        return new Pedido(1, "Julio Cesar","49988822212", listaItens,
+                359.99, StatusPedidoEnum.PEDIDO_PAGO, 1,"08554040");
     }
 
     public static String asJsonString(final Object object) throws JsonProcessingException {

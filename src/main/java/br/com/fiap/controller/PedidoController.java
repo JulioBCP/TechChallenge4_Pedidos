@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -42,7 +44,7 @@ public class PedidoController {
         return pedidoService.obterPedido(pedidoId);
     }
 
-    @GetMapping("/{statusPedido}")
+    @GetMapping("/status/{statusPedido}")
     public ResponseEntity<?> obterPedidoPorStatus(@PathVariable String statusPedido) {
         try {
             List<Pedido> listaPedidos = pedidoService.obterPedidoPorStatus(statusPedido);
@@ -60,8 +62,8 @@ public class PedidoController {
     }
 
     @PutMapping("/{pedidoId}")
-    public Pedido atualizarStatus(@PathVariable Integer pedidoId, @RequestBody StatusPedidoEnum status) {
-        return pedidoService.atualizarStatus(pedidoId, status);
+    public Pedido atualizarStatus(@PathVariable Integer pedidoId, @RequestBody JsonNode status) {
+        return pedidoService.atualizarStatus(pedidoId, status.findValue("status").asText());
     }
 
     @PutMapping("/entregador/{pedidoId}/{entregadorId}")
