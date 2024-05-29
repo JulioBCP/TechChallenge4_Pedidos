@@ -88,12 +88,12 @@ public class PedidoService {
         }
     }
 
-    public Pedido atualizarStatus(Integer pedidoId, StatusPedidoEnum status) {
-
+    public Pedido atualizarStatus(Integer pedidoId, String status) {
         Pedido pedido = pedidoRepository.findById(pedidoId).orElse(null);
+        StatusPedidoEnum statusPedidoEnum = StatusPedidoEnum.obterStatusPorNomeOuStringEnum(status);
 
         if (pedido != null) {
-            pedido.setStatus(status);
+            pedido.setStatus(statusPedidoEnum);
             pedidoRepository.save(pedido);
         } else {
             throw new NoSuchElementException("Pedido com código {} não encontrado" + pedidoId);
